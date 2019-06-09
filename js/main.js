@@ -19,15 +19,32 @@ function generateObjects() {
     photos[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
       likes: generateRandom(15, 200),
-      comments: {
-        avatar: 'img/avatar-' + generateRandom(1, 6) + '.svg',
-        message: COMENTS_VARIANTS[generateRandom(0, COMENTS_VARIANTS.length - 1)],
-        name: NAMES[generateRandom(0, NAMES.length)]
-      }
+      comments: generateComments()
     };
   }
   return photos;
 }
 
-console.log(generateObjects());
-// var template = document.querySelector('#picture');
+function generateComments() {
+  var comments = [];
+  for (var i = 0; i < generateRandom(1, 5); i++) {
+    comments[i] = {
+      avatar: 'img/avatar-' + generateRandom(1, 6) + '.svg',
+      message: COMENTS_VARIANTS[generateRandom(0, COMENTS_VARIANTS.length - 1)],
+      name: NAMES[generateRandom(0, NAMES.length)]
+    };
+  }
+
+  return comments;
+}
+
+function createPicturesDOM(image) {
+  var picture = pictureTemplate.cloneNode(true);
+  picture.querySelector('.picture__img').src = image.url;
+  picture.querySelector('.picture__comments').textContent = image.comments.length;
+  picture.querySelector('.picture__likes').textContent = image.likes;
+}
+
+var pictureTemplate = document.querySelector('#picture')
+  .content
+  .querySelector('.picture');
