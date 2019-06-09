@@ -15,13 +15,12 @@ function generateRandom(min, max) {
 
 function generateObjects() {
   var photos = [];
-  for (var i = 0; i < OBJECTS_AMOUNT; i++) {
-    photos[i] = {
-      url: 'photos/' + (i + 1) + '.jpg',
-      likes: generateRandom(15, 200),
-      comments: generateComments()
-    };
-  }
+  photos[i] = {
+    url: 'photos/' + (i + 1) + '.jpg',
+    likes: generateRandom(15, 200),
+    comments: generateComments()
+  };
+
   return photos;
 }
 
@@ -40,11 +39,25 @@ function generateComments() {
 
 function createPicturesDOM(image) {
   var picture = pictureTemplate.cloneNode(true);
-  picture.querySelector('.picture__img').src = image.url;
-  picture.querySelector('.picture__comments').textContent = image.comments.length;
-  picture.querySelector('.picture__likes').textContent = image.likes;
+  picture.querySelector('.picture__img').src = image[i].url;
+  picture.querySelector('.picture__comments').textContent = image[i].comments.length;
+  picture.querySelector('.picture__likes').textContent = image[i].likes;
+
+  return picture;
+}
+
+function putElementIntoBlock(whatToPut, whereToPut) {
+  whereToPut.appendChild(createPicturesDOM(whatToPut));
 }
 
 var pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
+var pictures = document.querySelector('.pictures');
+var fragment = document.createDocumentFragment();
+
+for (var i = 0; i < OBJECTS_AMOUNT; i++) {
+  putElementIntoBlock(generateObjects(i), fragment);
+}
+
+pictures.appendChild(fragment);
