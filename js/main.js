@@ -15,7 +15,6 @@ var pictureTemplate = document.querySelector('#picture')
   .querySelector('.picture');
 var picturesElement = document.querySelector('.pictures');
 var fragment = document.createDocumentFragment();
-var photoNubmber;
 
 function getRandomIntegerFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -55,8 +54,7 @@ function createPicturesDOM(image) {
 }
 
 for (var i = 0; i < AMOUNT; i++) {
-  photoNubmber = i;
-  fragment.appendChild(createPicturesDOM(generateObject(photoNubmber)));
+  fragment.appendChild(createPicturesDOM(generateObject(i)));
 }
 
 picturesElement.appendChild(fragment);
