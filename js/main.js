@@ -54,26 +54,31 @@ function onChromePinMouseup() {
   var deltaPin; // Значение будет высчитываться как разность положений ползунка
   var chromeLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, chromeInterval);
   effectLevelInputElement.value = chromeLevel;
+  imgPreviewElement.style = 'filter: grayscale(' + chromeLevel + ')';
 }
 function onSepiaPinMouseup() {
   var deltaPin;
   var sepiaLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, sepiaInterval);
   effectLevelInputElement.value = sepiaLevel;
+  imgPreviewElement.style = 'filter: sepia(' + sepiaLevel + ')';
 }
 function onMarvinPinMouseup() {
   var deltaPin;
   var marvinLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, marvinInterval);
   effectLevelInputElement.value = marvinLevel;
+  imgPreviewElement.style = 'filter: invert(' + marvinLevel + ')';
 }
 function onPhobosPinMouseup() {
   var deltaPin;
   var phobosLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, phobosInterval);
   effectLevelInputElement.value = phobosLevel;
+  imgPreviewElement.style = 'filter: blur(' + phobosLevel + ')';
 }
 function onHeatPinMouseup() {
   var deltaPin;
   var heatLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, heatInterval);
   effectLevelInputElement.value = heatLevel;
+  imgPreviewElement.style = 'filter: brightness(' + heatLevel + ')';
 }
 
 function onScaleSmallerClick() {
