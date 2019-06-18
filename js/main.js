@@ -10,20 +10,32 @@ var COMMENTS = ['Всё отлично!',
 var NAMES = ['Саша', 'Петя', 'Даша', 'Ростислав', 'Августина', 'Любомир', 'Евдокия', 'Стеша', 'fox777', 'Настя'];
 var AMOUNT = 25;
 var ESC_KEYCODE = 27;
-var SCALE_STEP = 25;
-var SCALE_MAX = 100;
-var SCALE_MIN = 0;
+var Scale = {
+  STEP: 25,
+  MAX: 100,
+  MIN: 0
+};
 var SLIDER_WIDTH; // Это значение надо будет посчитать в следующем задании
-var CHROME_MIN = 0;
-var CHROME_MAX = 1;
-var SEPIA_MIN = 0;
-var SEPIA_MAX = 1;
-var MARVIN_MIN = 0;
-var MARVIN_MAX = 100;
-var FHOBOS_MIN = 0;
-var FHOBOS_MAX = 3;
-var HEAT_MIN = 1;
-var HEAT_MAX = 3;
+var ChromeEffect = {
+  MIN: 0,
+  MAX: 1
+};
+var SepiaEffect = {
+  MIN: 0,
+  MAX: 1
+};
+var MarvinEffect = {
+  MIN: 0,
+  MAX: 100
+};
+var FhobosEffect = {
+  MIN: 0,
+  MAX: 3
+};
+var HeatEffect = {
+  MIN: 1,
+  MAX: 3
+};
 var EFFECT_BASIC = 100;
 
 var pictureTemplate = document.querySelector('#picture')
@@ -40,56 +52,33 @@ var scaleControlBiggerElement = document.querySelector('.scale__control--bigger'
 var scaleControlValueElement = document.querySelector('.scale__control--value');
 var imgPreviewElement = document.querySelector('.img-upload__preview');
 var effectsList = document.querySelector('.effects__list');
-var EffectLevelElement = document.querySelector('.effect-level__pin');
+var effectLevelElement = document.querySelector('.effect-level__pin');
 var effectLevelInputElement = document.querySelector('.effect-level__value');
 var imgUploadSliderElement = document.querySelector('.img-upload__effect-level');
 var scaleValue = 100;
-var chromeInterval = CHROME_MAX - CHROME_MIN;
-var sepiaInterval = SEPIA_MAX - SEPIA_MIN;
-var marvinInterval = MARVIN_MAX - MARVIN_MIN;
-var phobosInterval = FHOBOS_MAX - FHOBOS_MIN;
-var heatInterval = HEAT_MAX - HEAT_MIN;
+var EffectsInterval = {
+  chrome: ChromeEffect.MAX - ChromeEffect.MIN,
+  sepia: SepiaEffect.MAX - SepiaEffect.MIN,
+  marvin: MarvinEffect.MAX - MarvinEffect.MIN,
+  phobos: FhobosEffect.MAX - FhobosEffect.MIN,
+  heat: HeatEffect.MAX - HeatEffect.MIN
+};
 
-function onChromePinMouseup() {
-  var deltaPin; // Значение будет высчитываться как разность положений ползунка
-  var chromeLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, chromeInterval);
-  effectLevelInputElement.value = chromeLevel;
-  imgPreviewElement.style = 'filter: grayscale(' + chromeLevel + ')';
-}
-function onSepiaPinMouseup() {
-  var deltaPin;
-  var sepiaLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, sepiaInterval);
-  effectLevelInputElement.value = sepiaLevel;
-  imgPreviewElement.style = 'filter: sepia(' + sepiaLevel + ')';
-}
-function onMarvinPinMouseup() {
-  var deltaPin;
-  var marvinLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, marvinInterval);
-  effectLevelInputElement.value = marvinLevel;
-  imgPreviewElement.style = 'filter: invert(' + marvinLevel + ')';
-}
-function onPhobosPinMouseup() {
-  var deltaPin;
-  var phobosLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, phobosInterval);
-  effectLevelInputElement.value = phobosLevel;
-  imgPreviewElement.style = 'filter: blur(' + phobosLevel + ')';
-}
-function onHeatPinMouseup() {
-  var deltaPin;
-  var heatLevel = setEffectIntensity(deltaPin, SLIDER_WIDTH, heatInterval);
-  effectLevelInputElement.value = heatLevel;
-  imgPreviewElement.style = 'filter: brightness(' + heatLevel + ')';
+function onPopupEscKeydown(evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
 }
 
-function onScaleSmallerClick() {
-  scaleValue = getSmallerScaleStep(scaleValue);
-  scaleControlValueElement.value = scaleValue + '%';
-  imgPreviewElement.style = 'transform: scale(' + scaleValue / SCALE_MAX + ');';
-}
 function onScaleBiggerClick() {
   scaleValue = getBiggerScaleStep(scaleValue);
   scaleControlValueElement.value = scaleValue + '%';
-  imgPreviewElement.style = 'transform: scale(' + scaleValue / SCALE_MAX + ');';
+  imgPreviewElement.style = 'transform: scale(' + scaleValue / Scale.MAX + ');';
+}
+function onScaleSmallerClick() {
+  scaleValue = getSmallerScaleStep(scaleValue);
+  scaleControlValueElement.value = scaleValue + '%';
+  imgPreviewElement.style = 'transform: scale(' + scaleValue / Scale.MAX + ');';
 }
 
 function onEffectsListChange(evt) {
@@ -114,10 +103,63 @@ function onEffectsListChange(evt) {
   }
 }
 
-function onPopupEscKeydown(evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
-    closePopup();
+function onChromePinMouseup() {
+  setEffect('grayscale', EffectsInterval.chrome);
+}
+
+function onSepiaPinMouseup() {
+  setEffect('sepia', EffectsInterval.sepia);
+}
+
+function onMarvinPinMouseup() {
+  setEffect('invert', EffectsInterval.marvin);
+}
+
+function onPhobosPinMouseup() {
+  setEffect('blur', EffectsInterval.phobos);
+}
+
+function onHeatPinMouseup() {
+  setEffect('brightness', EffectsInterval.heat);
+}
+
+function openPopup() {
+  uploadFormELement.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscKeydown);
+  scaleControlBiggerElement.addEventListener('click', onScaleBiggerClick);
+  scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
+  effectsList.addEventListener('change', onEffectsListChange);
+}
+
+function closePopup() {
+  uploadFormELement.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscKeydown);
+  scaleControlBiggerElement.removeEventListener('click', onScaleBiggerClick);
+  scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
+  effectsList.removeEventListener('change', onEffectsListChange);
+}
+
+function getBiggerScaleStep(value) {
+  value += Scale.STEP;
+  if (value > Scale.MAX) {
+    value = Scale.MAX;
   }
+  return value;
+}
+
+function getSmallerScaleStep(value) {
+  value -= Scale.STEP;
+  if (value < Scale.MIN) {
+    value = Scale.MIN;
+  }
+  return value;
+}
+
+function setEffect(filterName, interval) {
+  var deltaPin; // Значение будет высчитываться как разность положений ползунка
+  var level = setEffectIntensity(deltaPin, SLIDER_WIDTH, interval);
+  effectLevelInputElement.value = level;
+  imgPreviewElement.style = 'filter: ' + filterName + '(' + level + ')';
 }
 
 function setEffectIntensity(deltaPin, sliderWidth, effectInterval) {
@@ -134,39 +176,8 @@ function setResetPhotoState() {
 function setPhotoFilter(className, handler) {
   setResetPhotoState();
   imgPreviewElement.classList.add(className);
-  EffectLevelElement.addEventListener('mouseup', handler);
+  effectLevelElement.addEventListener('mouseup', handler);
   imgUploadSliderElement.classList.remove('hidden');
-}
-
-function getBiggerScaleStep(value) {
-  value += SCALE_STEP;
-  if (value > SCALE_MAX) {
-    value = SCALE_MAX;
-  }
-  return value;
-}
-
-function getSmallerScaleStep(value) {
-  value -= SCALE_STEP;
-  if (value < SCALE_MIN) {
-    value = SCALE_MIN;
-  }
-  return value;
-}
-
-function openPopup() {
-  uploadFormELement.classList.remove('hidden');
-  document.addEventListener('keydown', onPopupEscKeydown);
-  scaleControlBiggerElement.addEventListener('click', onScaleBiggerClick);
-  scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
-  effectsList.addEventListener('change', onEffectsListChange);
-}
-function closePopup() {
-  uploadFormELement.classList.add('hidden');
-  document.removeEventListener('keydown', onPopupEscKeydown);
-  scaleControlBiggerElement.removeEventListener('click', onScaleBiggerClick);
-  scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
-  effectsList.removeEventListener('change', onEffectsListChange);
 }
 
 function getRandomIntegerFromInterval(min, max) {
