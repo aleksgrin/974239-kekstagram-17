@@ -15,7 +15,6 @@ var Scale = {
   MAX: 100,
   MIN: 0
 };
-var SLIDER_WIDTH; // Это значение надо будет посчитать в следующем задании
 var ChromeEffect = {
   MIN: 0,
   MAX: 1
@@ -36,7 +35,8 @@ var HeatEffect = {
   MIN: 1,
   MAX: 3
 };
-var EFFECT_BASIC = 100;
+var FILTER_VALUE_DEFAULT = 100;
+var SCALE_VALUE_DEFAULT = 100;
 
 var pictureTemplate = document.querySelector('#picture')
   .content
@@ -55,7 +55,6 @@ var effectsList = document.querySelector('.effects__list');
 var effectLevelElement = document.querySelector('.effect-level__pin');
 var effectLevelInputElement = document.querySelector('.effect-level__value');
 var imgUploadSliderElement = document.querySelector('.img-upload__effect-level');
-var scaleValue = 100;
 var EffectsInterval = {
   chrome: ChromeEffect.MAX - ChromeEffect.MIN,
   sepia: SepiaEffect.MAX - SepiaEffect.MIN,
@@ -71,64 +70,35 @@ function onPopupEscKeydown(evt) {
 }
 
 function onScaleBiggerClick() {
-  scaleValue = getBiggerScaleStep(scaleValue);
-  scaleControlValueElement.value = scaleValue + '%';
-  imgPreviewElement.style = 'transform: scale(' + scaleValue / Scale.MAX + ');';
+  setScaleValue(true);
 }
+
 function onScaleSmallerClick() {
-  scaleValue = getSmallerScaleStep(scaleValue);
+  setScaleValue();
+}
+
+function setScaleValue(flag) {
+  var scaleValue = Number(scaleControlValueElement.value.substring(0, scaleControlValueElement.value.length - 1));
+  if (flag) {
+    scaleValue = getBiggerScaleStep(scaleValue);
+  } else {
+    scaleValue = getSmallerScaleStep(scaleValue);
+  }
   scaleControlValueElement.value = scaleValue + '%';
   imgPreviewElement.style = 'transform: scale(' + scaleValue / Scale.MAX + ');';
-}
-
-function onEffectsListChange(evt) {
-  if (evt.target.id === 'effect-chrome') {
-    setPhotoFilter('effects__preview--chrome', onChromePinMouseup);
-  }
-  if (evt.target.id === 'effect-sepia') {
-    setPhotoFilter('effects__preview--sepia', onSepiaPinMouseup);
-  }
-  if (evt.target.id === 'effect-marvin') {
-    setPhotoFilter('effects__preview--marvin', onMarvinPinMouseup);
-  }
-  if (evt.target.id === 'effect-phobos') {
-    setPhotoFilter('effects__preview--phobos', onPhobosPinMouseup);
-  }
-  if (evt.target.id === 'effect-heat') {
-    setPhotoFilter('effects__preview--heat', onHeatPinMouseup);
-  }
-  if (evt.target.id === 'effect-none') {
-    setResetPhotoState();
-    imgUploadSliderElement.classList.add('hidden');
-  }
-}
-
-function onChromePinMouseup() {
-  setEffect('grayscale', EffectsInterval.chrome);
-}
-
-function onSepiaPinMouseup() {
-  setEffect('sepia', EffectsInterval.sepia);
-}
-
-function onMarvinPinMouseup() {
-  setEffect('invert', EffectsInterval.marvin);
-}
-
-function onPhobosPinMouseup() {
-  setEffect('blur', EffectsInterval.phobos);
-}
-
-function onHeatPinMouseup() {
-  setEffect('brightness', EffectsInterval.heat);
 }
 
 function openPopup() {
+  var checkedFilterType = effectsList.querySelector('input:checked').value;
+
   uploadFormELement.classList.remove('hidden');
   document.addEventListener('keydown', onPopupEscKeydown);
   scaleControlBiggerElement.addEventListener('click', onScaleBiggerClick);
   scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
-  effectsList.addEventListener('change', onEffectsListChange);
+  effectsList.addEventListener('change', onFilterChange);
+  effectLevelElement.addEventListener('mouseup', onPinMouseUp);
+  setFilter(checkedFilterType, FILTER_VALUE_DEFAULT);
+  scaleControlValueElement.value = SCALE_VALUE_DEFAULT + '%';
 }
 
 function closePopup() {
@@ -136,11 +106,82 @@ function closePopup() {
   document.removeEventListener('keydown', onPopupEscKeydown);
   scaleControlBiggerElement.removeEventListener('click', onScaleBiggerClick);
   scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
-  effectsList.removeEventListener('change', onEffectsListChange);
+  effectsList.removeEventListener('change', onFilterChange);
+  effectLevelElement.removeEventListener('mouseup', onPinMouseUp);
+}
+
+function setFilter(type, value) {
+  toggleRangeElementVisibility(type);
+  addFilterClassname(type);
+  setFilterEffectStyle(type, value);
+}
+
+function toggleRangeElementVisibility(filterValue) {
+  if (filterValue === 'none') {
+    imgUploadSliderElement.classList.add('hidden');
+  } else {
+    imgUploadSliderElement.classList.remove('hidden');
+  }
+}
+
+function addFilterClassname(filterType) {
+  imgPreviewElement.className = 'img-upload__preview';
+
+  switch (filterType) {
+    case 'chrome':
+      imgPreviewElement.classList.add('effects__preview--chrome');
+      break;
+    case 'sepia':
+      imgPreviewElement.classList.add('effects__preview--sepia');
+      break;
+    case 'marvin':
+      imgPreviewElement.classList.add('effects__preview--blur');
+      break;
+    case 'phobos':
+      imgPreviewElement.classList.add('effects__preview--phobos');
+      break;
+    case 'heat':
+      imgPreviewElement.classList.add('effects__preview--heat');
+      break;
+  }
+}
+
+function setFilterEffectStyle(filterType, pinValue) {
+  effectLevelInputElement.value = pinValue;
+
+  switch (filterType) {
+    case 'chrome':
+      imgPreviewElement.style = 'filter: grayscale(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.chrome + ')';
+      break;
+    case 'sepia':
+      imgPreviewElement.style = 'filter: sepia(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.sepia + ')';
+      break;
+    case 'marvin':
+      imgPreviewElement.style = 'filter: invert(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.marvin + '%)';
+      break;
+    case 'phobos':
+      imgPreviewElement.style = 'filter: blur(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.phobos + 'px)';
+      break;
+    case 'heat':
+      imgPreviewElement.style = 'filter: brightness(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.heat + ')';
+      break;
+    default:
+      imgPreviewElement.style = '';
+      break;
+  }
+}
+
+function onFilterChange(evt) {
+  setFilter(evt.target.value, FILTER_VALUE_DEFAULT);
+}
+
+function onPinMouseUp() {
+  var checkedFilterType = effectsList.querySelector('input:checked').value;
+  setFilterEffectStyle(checkedFilterType, 60);
 }
 
 function getBiggerScaleStep(value) {
-  value += Scale.STEP;
+  value = value + Scale.STEP;
   if (value > Scale.MAX) {
     value = Scale.MAX;
   }
@@ -153,31 +194,6 @@ function getSmallerScaleStep(value) {
     value = Scale.MIN;
   }
   return value;
-}
-
-function setEffect(filterName, interval) {
-  var deltaPin; // Значение будет высчитываться как разность положений ползунка
-  var level = setEffectIntensity(deltaPin, SLIDER_WIDTH, interval);
-  effectLevelInputElement.value = level;
-  imgPreviewElement.style = 'filter: ' + filterName + '(' + level + ')';
-}
-
-function setEffectIntensity(deltaPin, sliderWidth, effectInterval) {
-  var effectValue = deltaPin / sliderWidth * effectInterval;
-  return effectValue;
-}
-
-function setResetPhotoState() {
-  // Потом сюда добавится еще начальное положение ползунка
-  effectLevelInputElement.value = EFFECT_BASIC;
-  imgPreviewElement.className = 'img-upload__preview';
-}
-
-function setPhotoFilter(className, handler) {
-  setResetPhotoState();
-  imgPreviewElement.classList.add(className);
-  effectLevelElement.addEventListener('mouseup', handler);
-  imgUploadSliderElement.classList.remove('hidden');
 }
 
 function getRandomIntegerFromInterval(min, max) {
@@ -224,8 +240,6 @@ uploadInputElement.addEventListener('change', function () {
 uploadFormCancelElement.addEventListener('click', function () {
   closePopup();
 });
-
-scaleControlValueElement.value = scaleValue + '%';
 
 for (var i = 0; i < AMOUNT; i++) {
   fragment.appendChild(createPicturesDOM(generateObject(i)));
