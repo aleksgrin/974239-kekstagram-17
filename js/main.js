@@ -55,6 +55,7 @@ var effectsList = document.querySelector('.effects__list');
 var effectLevelElement = document.querySelector('.effect-level__pin');
 var effectLevelInputElement = document.querySelector('.effect-level__value');
 var imgUploadSliderElement = document.querySelector('.img-upload__effect-level');
+var uploadPhotoComment = document.querySelector('.text__description');
 var EffectsInterval = {
   chrome: ChromeEffect.MAX - ChromeEffect.MIN,
   sepia: SepiaEffect.MAX - SepiaEffect.MIN,
@@ -77,6 +78,13 @@ function onScaleSmallerClick() {
   setScaleValue();
 }
 
+function onPhotoCommentFocus() {
+  document.removeEventListener('keydown', onPopupEscKeydown);
+}
+function onPhotoCommentBlur() {
+  document.addEventListener('keydown', onPopupEscKeydown);
+}
+
 function setScaleValue(flag) {
   var scaleValue = Number(scaleControlValueElement.value.substring(0, scaleControlValueElement.value.length - 1));
   if (flag) {
@@ -97,6 +105,8 @@ function openPopup() {
   scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
   effectsList.addEventListener('change', onFilterChange);
   effectLevelElement.addEventListener('mouseup', onPinMouseUp);
+  uploadPhotoComment.addEventListener('focus', onPhotoCommentFocus);
+  uploadPhotoComment.addEventListener('blur', onPhotoCommentBlur);
   setFilter(checkedFilterType, FILTER_VALUE_DEFAULT);
   scaleControlValueElement.value = SCALE_VALUE_DEFAULT + '%';
 }
@@ -108,6 +118,8 @@ function closePopup() {
   scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
   effectsList.removeEventListener('change', onFilterChange);
   effectLevelElement.removeEventListener('mouseup', onPinMouseUp);
+  uploadPhotoComment.removeEventListener('focus', onPhotoCommentFocus);
+  uploadPhotoComment.removeEventListener('blur', onPhotoCommentBlur);
 }
 
 function setFilter(type, value) {
