@@ -13,7 +13,7 @@ var ESC_KEYCODE = 27;
 var Scale = {
   STEP: 25,
   MAX: 100,
-  MIN: 0
+  MIN: 25
 };
 var ChromeEffect = {
   MIN: 0,
@@ -37,6 +37,8 @@ var HeatEffect = {
 };
 var FILTER_VALUE_DEFAULT = 100;
 var SCALE_VALUE_DEFAULT = 100;
+var ZOOM_IN = 'zoomIn';
+var ZOOM_OUT = 'zoomOut';
 
 var pictureTemplate = document.querySelector('#picture')
   .content
@@ -55,7 +57,9 @@ var effectsList = document.querySelector('.effects__list');
 var effectLevelElement = document.querySelector('.effect-level__pin');
 var effectLevelInputElement = document.querySelector('.effect-level__value');
 var imgUploadSliderElement = document.querySelector('.img-upload__effect-level');
-var uploadPhotoComment = document.querySelector('.text__description');
+var uploadPhotoCommentElement = document.querySelector('.text__description');
+var uploadSubmitButtonElement = document.querySelector('.img-upload__submit');
+var textHashtagsElement = document.querySelector('.text__hashtags');
 var EffectsInterval = {
   chrome: ChromeEffect.MAX - ChromeEffect.MIN,
   sepia: SepiaEffect.MAX - SepiaEffect.MIN,
@@ -71,11 +75,11 @@ function onPopupEscKeydown(evt) {
 }
 
 function onScaleBiggerClick() {
-  setScaleValue(true);
+  setScaleValue(ZOOM_IN);
 }
 
 function onScaleSmallerClick() {
-  setScaleValue();
+  setScaleValue(ZOOM_OUT);
 }
 
 function onPhotoCommentFocus() {
@@ -85,14 +89,19 @@ function onPhotoCommentBlur() {
   document.addEventListener('keydown', onPopupEscKeydown);
 }
 
+function onUploadSubmitButtonClick(evt) {
+  evt.preventDefault();
+  closePopup();
+}
+
 function setScaleValue(flag) {
   var scaleValue = Number(scaleControlValueElement.value.substring(0, scaleControlValueElement.value.length - 1));
-  if (flag) {
+  if (flag === ZOOM_IN) {
     scaleValue = getBiggerScaleStep(scaleValue);
-  } else {
+  } else if (flag === ZOOM_OUT) {
     scaleValue = getSmallerScaleStep(scaleValue);
   }
-  scaleControlValueElement.value = scaleValue + '%';
+  setControlElementValue(scaleValue);
   imgPreviewElement.style = 'transform: scale(' + scaleValue / Scale.MAX + ');';
 }
 
@@ -105,21 +114,34 @@ function openPopup() {
   scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
   effectsList.addEventListener('change', onFilterChange);
   effectLevelElement.addEventListener('mouseup', onPinMouseUp);
-  uploadPhotoComment.addEventListener('focus', onPhotoCommentFocus);
-  uploadPhotoComment.addEventListener('blur', onPhotoCommentBlur);
+  uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
+  uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
+  uploadSubmitButtonElement.addEventListener('click', onUploadSubmitButtonClick);
   setFilter(checkedFilterType, FILTER_VALUE_DEFAULT);
-  scaleControlValueElement.value = SCALE_VALUE_DEFAULT + '%';
+  setControlElementValue(SCALE_VALUE_DEFAULT);
 }
 
 function closePopup() {
+  setFormInputResetState();
   uploadFormELement.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscKeydown);
   scaleControlBiggerElement.removeEventListener('click', onScaleBiggerClick);
   scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
   effectsList.removeEventListener('change', onFilterChange);
   effectLevelElement.removeEventListener('mouseup', onPinMouseUp);
-  uploadPhotoComment.removeEventListener('focus', onPhotoCommentFocus);
-  uploadPhotoComment.removeEventListener('blur', onPhotoCommentBlur);
+  uploadPhotoCommentElement.removeEventListener('focus', onPhotoCommentFocus);
+  uploadPhotoCommentElement.removeEventListener('blur', onPhotoCommentBlur);
+  uploadSubmitButtonElement.removeEventListener('click', onUploadSubmitButtonClick);
+}
+
+function setFormInputResetState() {
+  uploadInputElement.value = '';
+  uploadPhotoCommentElement.value = '';
+  textHashtagsElement.value = '';
+}
+
+function setControlElementValue(value) {
+  scaleControlValueElement.value = value + '%';
 }
 
 function setFilter(type, value) {
