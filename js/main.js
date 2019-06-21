@@ -101,6 +101,7 @@ function setScaleValue(flag) {
   } else if (flag === ZOOM_OUT) {
     scaleValue = getSmallerScaleStep(scaleValue);
   }
+
   setControlElementValue(scaleValue);
   imgPreviewElement.style = 'transform: scale(' + scaleValue / Scale.MAX + ');';
 }
