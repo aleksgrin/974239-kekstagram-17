@@ -111,10 +111,7 @@ function onPinMouseDown(downEvt) {
     var shiftX = startCoordsX - moveEvt.clientX;
     startCoordsX = moveEvt.clientX;
     pinOffset = effectLevelElement.offsetLeft;
-    var pinPersentageValue = getPinValue(pinOffset, shiftX);
-    effectLevelElement.style.left = pinPersentageValue + '%';
-    effectLevelLineDepthElement.style.width = pinPersentageValue + '%';
-    setFilterEffectStyle(checkedFilterType, pinPersentageValue);
+    setFilterEffectStyle(checkedFilterType, getPinValue(pinOffset, shiftX));
   }
   function onPinMouseUp() {
     document.removeEventListener('mousemove', onPinMouseMove);
@@ -213,6 +210,8 @@ function addFilterClassname(filterType) {
 
 function setFilterEffectStyle(filterType, pinValue) {
   effectLevelInputElement.value = pinValue;
+  effectLevelElement.style.left = pinValue + '%';
+  effectLevelLineDepthElement.style.width = pinValue + '%';
 
   switch (filterType) {
     case 'chrome':
