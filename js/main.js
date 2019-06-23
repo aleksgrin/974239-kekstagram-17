@@ -115,7 +115,7 @@ function onPinMouseDown(downEvt) {
   }
   function onPinMouseUp() {
     document.removeEventListener('mousemove', onPinMouseMove);
-    document.addEventListener('mouseup', onPinMouseUp);
+    document.removeEventListener('mouseup', onPinMouseUp);
   }
 
   document.addEventListener('mousemove', onPinMouseMove);
