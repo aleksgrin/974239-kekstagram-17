@@ -39,6 +39,8 @@ var FILTER_VALUE_DEFAULT = 100;
 var SCALE_VALUE_DEFAULT = 100;
 var ZOOM_IN = 'zoomIn';
 var ZOOM_OUT = 'zoomOut';
+var PIN_MAX = 100;
+var PIN_MIN = 0;
 
 var pictureTemplate = document.querySelector('#picture')
   .content
@@ -55,6 +57,8 @@ var scaleControlValueElement = document.querySelector('.scale__control--value');
 var imgPreviewElement = document.querySelector('.img-upload__preview');
 var effectsList = document.querySelector('.effects__list');
 var effectLevelElement = document.querySelector('.effect-level__pin');
+var effectLevelLineElement = document.querySelector('.effect-level__line');
+var effectLevelLineDepthElement = document.querySelector('.effect-level__depth');
 var effectLevelInputElement = document.querySelector('.effect-level__value');
 var imgUploadSliderElement = document.querySelector('.img-upload__effect-level');
 var uploadPhotoCommentElement = document.querySelector('.text__description');
@@ -94,6 +98,30 @@ function onUploadSubmitButtonClick(evt) {
   closePopup();
 }
 
+function onFilterChange(evt) {
+  setFilter(evt.target.value, FILTER_VALUE_DEFAULT);
+}
+
+function onPinMouseDown(downEvt) {
+  var startCoordsX = downEvt.clientX;
+  var pinOffset = effectLevelElement.offsetLeft;
+  var checkedFilterType = effectsList.querySelector('input:checked').value;
+
+  function onPinMouseMove(moveEvt) {
+    var shiftX = startCoordsX - moveEvt.clientX;
+    startCoordsX = moveEvt.clientX;
+    pinOffset = effectLevelElement.offsetLeft;
+    setFilterEffectStyle(checkedFilterType, getPinValue(pinOffset, shiftX));
+  }
+  function onPinMouseUp() {
+    document.removeEventListener('mousemove', onPinMouseMove);
+    document.removeEventListener('mouseup', onPinMouseUp);
+  }
+
+  document.addEventListener('mousemove', onPinMouseMove);
+  document.addEventListener('mouseup', onPinMouseUp);
+}
+
 function setScaleValue(flag) {
   var scaleValue = Number(scaleControlValueElement.value.substring(0, scaleControlValueElement.value.length - 1));
   if (flag === ZOOM_IN) {
@@ -114,7 +142,7 @@ function openPopup() {
   scaleControlBiggerElement.addEventListener('click', onScaleBiggerClick);
   scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
   effectsList.addEventListener('change', onFilterChange);
-  effectLevelElement.addEventListener('mouseup', onPinMouseUp);
+  effectLevelElement.addEventListener('mousedown', onPinMouseDown);
   uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
   uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
   uploadSubmitButtonElement.addEventListener('click', onUploadSubmitButtonClick);
@@ -129,7 +157,7 @@ function closePopup() {
   scaleControlBiggerElement.removeEventListener('click', onScaleBiggerClick);
   scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
   effectsList.removeEventListener('change', onFilterChange);
-  effectLevelElement.removeEventListener('mouseup', onPinMouseUp);
+  effectLevelElement.removeEventListener('mousedown', onPinMouseDown);
   uploadPhotoCommentElement.removeEventListener('focus', onPhotoCommentFocus);
   uploadPhotoCommentElement.removeEventListener('blur', onPhotoCommentBlur);
   uploadSubmitButtonElement.removeEventListener('click', onUploadSubmitButtonClick);
@@ -183,6 +211,8 @@ function addFilterClassname(filterType) {
 
 function setFilterEffectStyle(filterType, pinValue) {
   effectLevelInputElement.value = pinValue;
+  effectLevelElement.style.left = pinValue + '%';
+  effectLevelLineDepthElement.style.width = pinValue + '%';
 
   switch (filterType) {
     case 'chrome':
@@ -206,15 +236,6 @@ function setFilterEffectStyle(filterType, pinValue) {
   }
 }
 
-function onFilterChange(evt) {
-  setFilter(evt.target.value, FILTER_VALUE_DEFAULT);
-}
-
-function onPinMouseUp() {
-  var checkedFilterType = effectsList.querySelector('input:checked').value;
-  setFilterEffectStyle(checkedFilterType, 60);
-}
-
 function getBiggerScaleStep(value) {
   value = value + Scale.STEP;
   if (value > Scale.MAX) {
@@ -229,6 +250,18 @@ function getSmallerScaleStep(value) {
     value = Scale.MIN;
   }
   return value;
+}
+
+function getPinValue(pinLeft, pinDelta) {
+  var pinValue = (pinLeft - pinDelta) / effectLevelLineElement.offsetWidth * 100;
+  if (pinValue >= PIN_MAX) {
+    pinValue = PIN_MAX;
+  }
+  if (pinValue <= PIN_MIN) {
+    pinValue = PIN_MIN;
+  }
+
+  return pinValue;
 }
 
 function getRandomIntegerFromInterval(min, max) {
