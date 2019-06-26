@@ -9,18 +9,19 @@
   ];
   var NAMES = ['Саша', 'Петя', 'Даша', 'Ростислав', 'Августина', 'Любомир', 'Евдокия', 'Стеша', 'fox777', 'Настя'];
 
-  window.generateComments = {
-    getCommentsArray: function (amount) {
-      var comments = [];
-      for (var i = 0; i < amount; i++) {
-        comments[i] = {
-          avatar: 'img/avatar-' + window.getRandom.getRandomIntegerFromInterval(1, 6) + '.svg',
-          message: COMMENTS[window.getRandom.getRandomIntegerFromInterval(0, COMMENTS.length - 1)],
-          name: NAMES[window.getRandom.getRandomIntegerFromInterval(0, NAMES.length)]
-        };
-      }
-
-      return comments;
+  function getCommentsArray(amount) {
+    var comments = [];
+    for (var i = 0; i < amount; i++) {
+      comments[i] = {
+        avatar: 'img/avatar-' + window.randomNumber.get(1, 6) + '.svg',
+        message: COMMENTS[window.randomNumber.get(0, COMMENTS.length - 1)],
+        name: NAMES[window.randomNumber.get(0, NAMES.length)]
+      };
     }
+
+    return comments;
+  }
+  window.commentsArray = {
+    get: getCommentsArray
   };
 })();

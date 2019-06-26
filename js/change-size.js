@@ -1,7 +1,5 @@
 'use strict';
-
 (function () {
-
   var Scale = {
     STEP: 25,
     MAX: 100,
@@ -56,17 +54,22 @@
     return value;
   }
 
+  function addSizeEvents() {
+    scaleControlBiggerElement.addEventListener('click', onScaleBiggerClick);
+    scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
+  }
+
+  function resetSizeEvents() {
+    scaleControlBiggerElement.removeEventListener('click', onScaleBiggerClick);
+    scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
+  }
+
+  function setSizeDefault() {
+    setControlElementValue(SCALE_VALUE_DEFAULT);
+  }
   window.changeSize = {
-    addSizeEvent: function () {
-      scaleControlBiggerElement.addEventListener('click', onScaleBiggerClick);
-      scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
-    },
-    resetSizeEvent: function () {
-      scaleControlBiggerElement.removeEventListener('click', onScaleBiggerClick);
-      scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
-    },
-    setSizeDefault: function () {
-      setControlElementValue(SCALE_VALUE_DEFAULT);
-    }
+    init: addSizeEvents,
+    destroy: resetSizeEvents,
+    default: setSizeDefault
   };
 })();

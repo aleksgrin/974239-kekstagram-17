@@ -17,13 +17,15 @@
     return picture;
   }
 
+  function insertFragment() {
+    picturesElement.appendChild(fragment);
+  }
+
   for (var i = 0; i < AMOUNT; i++) {
-    fragment.appendChild(createPicturesDOM(window.generateObject.getPhotosArray(i)));
+    fragment.appendChild(createPicturesDOM(window.generateObjects.get(i)));
   }
 
   window.addPictures = {
-    add: function () {
-      picturesElement.appendChild(fragment);
-    }
+    render: insertFragment
   };
 })();

@@ -1,7 +1,5 @@
 'use strict';
-
 (function () {
-
   var ChromeEffect = {
     MIN: 0,
     MAX: 1
@@ -142,19 +140,24 @@
     }
   }
 
-  window.changeFilterIntensity = {
-    addFilterIntensityEvent: function () {
-      effectsList.addEventListener('change', onFilterChange);
-      effectLevelElement.addEventListener('mousedown', onPinMouseDown);
-    },
-    resetFilterIntensityEvent: function () {
-      effectsList.removeEventListener('change', onFilterChange);
-      effectLevelElement.removeEventListener('mousedown', onPinMouseDown);
-    },
-    setFilterDefault: function () {
-      var checkedFilterType = effectsList.querySelector('input:checked').value;
-      setFilter(checkedFilterType, FILTER_VALUE_DEFAULT);
-    }
-  };
+  function addFilterIntensityEvents() {
+    effectsList.addEventListener('change', onFilterChange);
+    effectLevelElement.addEventListener('mousedown', onPinMouseDown);
+  }
 
+  function resetFilterIntensityEvents() {
+    effectsList.removeEventListener('change', onFilterChange);
+    effectLevelElement.removeEventListener('mousedown', onPinMouseDown);
+  }
+
+  function setFilterDefault() {
+    var checkedFilterType = effectsList.querySelector('input:checked').value;
+    setFilter(checkedFilterType, FILTER_VALUE_DEFAULT);
+  }
+
+  window.changeFilterIntensity = {
+    init: addFilterIntensityEvents,
+    destroy: resetFilterIntensityEvents,
+    default: setFilterDefault
+  };
 })();

@@ -1,7 +1,5 @@
 'use strict';
-
 (function () {
-
   var uploadFormELement = document.querySelector('.img-upload__overlay');
   var uploadInputElement = document.querySelector('#upload-file');
   var uploadFormCancelElement = document.querySelector('#upload-cancel');
@@ -9,7 +7,9 @@
   var uploadPhotoCommentElement = document.querySelector('.text__description');
 
   function onPopupEscKeydown(evt) {
-    window.util.isEscEvent(evt, closePopup);
+    if (window.util.isEsc(evt)) {
+      closePopup();
+    }
   }
 
   function onUploadSubmitButtonClick(evt) {
@@ -32,13 +32,25 @@
     uploadSubmitButtonElement.removeEventListener('click', onUploadSubmitButtonClick);
     uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
     uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
-    window.changeFilterIntensity.resetFilterIntensityEvent();
-    window.changeSize.resetSizeEvent();
-    window.form.setFormDefault();
+    window.changeFilterIntensity.destroy();
+    window.changeSize.destroy();
+    window.form.default();
   }
 
   function setFormInputResetState() {
     uploadInputElement.value = '';
+  }
+
+  function init() {
+    uploadFormELement.classList.remove('hidden');
+    document.addEventListener('keydown', onPopupEscKeydown);
+    uploadSubmitButtonElement.addEventListener('click', onUploadSubmitButtonClick);
+    uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
+    uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
+    window.changeFilterIntensity.init();
+    window.changeFilterIntensity.default();
+    window.changeSize.init();
+    window.changeSize.default();
   }
 
   uploadFormCancelElement.addEventListener('click', function () {
@@ -46,16 +58,6 @@
   });
 
   window.popupSetup = {
-    addSetupListeners: function () {
-      uploadFormELement.classList.remove('hidden');
-      document.addEventListener('keydown', onPopupEscKeydown);
-      uploadSubmitButtonElement.addEventListener('click', onUploadSubmitButtonClick);
-      uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
-      uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
-      window.changeFilterIntensity.addFilterIntensityEvent();
-      window.changeFilterIntensity.setFilterDefault();
-      window.changeSize.addSizeEvent();
-      window.changeSize.setSizeDefault();
-    }
+    init: init
   };
 })();
