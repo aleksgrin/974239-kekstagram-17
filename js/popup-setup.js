@@ -25,17 +25,17 @@
     document.addEventListener('keydown', onPopupEscKeydown);
   }
 
-  function openPopup() {
-    uploadFormELement.classList.remove('hidden');
-    document.addEventListener('keydown', onPopupEscKeydown);
-    uploadSubmitButtonElement.addEventListener('click', onUploadSubmitButtonClick);
-    uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
-    uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
-    window.changeFilterIntensity.addFilterIntensityEvent();
-    window.changeFilterIntensity.setFilterDefault();
-    window.changeSize.addSizeEvent();
-    window.changeSize.setSizeDefault();
-  }
+  // function openPopup() {
+  //   uploadFormELement.classList.remove('hidden');
+  //   document.addEventListener('keydown', onPopupEscKeydown);
+  //   uploadSubmitButtonElement.addEventListener('click', onUploadSubmitButtonClick);
+  //   uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
+  //   uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
+  //   window.changeFilterIntensity.addFilterIntensityEvent();
+  //   window.changeFilterIntensity.setFilterDefault();
+  //   window.changeSize.addSizeEvent();
+  //   window.changeSize.setSizeDefault();
+  // }
 
   function closePopup() {
     setFormInputResetState();
@@ -53,11 +53,25 @@
     uploadInputElement.value = '';
   }
 
-  uploadInputElement.addEventListener('change', function () {
-    openPopup();
-  });
+  // uploadInputElement.addEventListener('change', function () {
+  //   openPopup();
+  // });
 
   uploadFormCancelElement.addEventListener('click', function () {
     closePopup();
   });
+
+  window.popupSetup = {
+    addSetupListeners: function () {
+      uploadFormELement.classList.remove('hidden');
+      document.addEventListener('keydown', onPopupEscKeydown);
+      uploadSubmitButtonElement.addEventListener('click', onUploadSubmitButtonClick);
+      uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
+      uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
+      window.changeFilterIntensity.addFilterIntensityEvent();
+      window.changeFilterIntensity.setFilterDefault();
+      window.changeSize.addSizeEvent();
+      window.changeSize.setSizeDefault();
+    }
+  };
 })();
