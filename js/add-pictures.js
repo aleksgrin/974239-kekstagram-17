@@ -6,7 +6,6 @@
   .content
   .querySelector('.picture');
   var picturesElement = document.querySelector('.pictures');
-  var fragment = document.createDocumentFragment();
 
   function createPicturesDOM(image) {
     var picture = pictureTemplate.cloneNode(true);
@@ -17,15 +16,21 @@
     return picture;
   }
 
-  function insertFragment() {
+  function imagesLoadHandler(photos) {
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < AMOUNT; i++) {
+      fragment.appendChild(createPicturesDOM(photos[i]));
+    }
+
     picturesElement.appendChild(fragment);
   }
 
-  for (var i = 0; i < AMOUNT; i++) {
-    fragment.appendChild(createPicturesDOM(window.generateObjects.get(i)));
+  function renderImages() {
+    window.backend.load(imagesLoadHandler, function () {});
   }
 
   window.addPictures = {
-    render: insertFragment
+    render: renderImages
   };
 })();

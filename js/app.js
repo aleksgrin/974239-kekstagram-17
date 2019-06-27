@@ -7,4 +7,6 @@
   });
 
   window.addPictures.render();
+
+  // window.backend.load();
 })();
