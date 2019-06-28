@@ -22,7 +22,7 @@
   }
 
   for (var i = 0; i < AMOUNT; i++) {
-    fragment.appendChild(createPicturesDOM(window.generateObjects.get(i)));
+    fragment.appendChild(createPicturesDOM(window.data.get[i]));
   }
 
   window.addPictures = {

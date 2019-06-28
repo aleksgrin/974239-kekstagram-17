@@ -32,25 +32,21 @@
     uploadSubmitButtonElement.removeEventListener('click', onUploadSubmitButtonClick);
     uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
     uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
-    window.changeFilterIntensity.destroy();
-    window.changeSize.destroy();
-    window.form.default();
+    window.preview.destroy();
   }
 
   function setFormInputResetState() {
     uploadInputElement.value = '';
   }
 
-  function init() {
+  function open() {
     uploadFormELement.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscKeydown);
     uploadSubmitButtonElement.addEventListener('click', onUploadSubmitButtonClick);
     uploadPhotoCommentElement.addEventListener('focus', onPhotoCommentFocus);
     uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
-    window.changeFilterIntensity.init();
-    window.changeFilterIntensity.default();
-    window.changeSize.init();
-    window.changeSize.default();
+    window.preview.init();
+    window.preview.default();
   }
 
   uploadFormCancelElement.addEventListener('click', function () {
@@ -58,6 +54,6 @@
   });
 
   window.popupSetup = {
-    init: init
+    open: open
   };
 })();
