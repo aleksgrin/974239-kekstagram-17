@@ -43,7 +43,7 @@
 
   var imgUploadSliderElement = document.querySelector('.img-upload__effect-level');
   var effectLevelLineElement = document.querySelector('.effect-level__line');
-  var imgPreviewElement = document.querySelector('.img-upload__preview');
+  var imgPreviewElement = document.querySelector('.img-upload__preview img');
   var effectLevelInputElement = document.querySelector('.effect-level__value');
   var effectLevelLineDepthElement = document.querySelector('.effect-level__depth');
   var effectLevelElement = document.querySelector('.effect-level__pin');

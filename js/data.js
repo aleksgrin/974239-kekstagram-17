@@ -8,14 +8,18 @@
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
   var NAMES = ['Саша', 'Петя', 'Даша', 'Ростислав', 'Августина', 'Любомир', 'Евдокия', 'Стеша', 'fox777', 'Настя'];
-  var AMOUNT = 25;
-  var photos = [];
+  var MIN_LIKES = 15;
+  var MAX_LIKES = 200;
+  var MIN_COMMENTS = 1;
+  var MAX_COMMENTS = 5;
+  var MIN_AVATAR_NUMBER = 1;
+  var MAX_AVATAR_NUMBER = 6;
 
   function getCommentsArray(amount) {
     var comments = [];
     for (var i = 0; i < amount; i++) {
       comments[i] = {
-        avatar: 'img/avatar-' + window.util.getRandom(1, 6) + '.svg',
+        avatar: 'img/avatar-' + window.util.getRandom(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER) + '.svg',
         message: COMMENTS[window.util.getRandom(0, COMMENTS.length - 1)],
         name: NAMES[window.util.getRandom(0, NAMES.length)]
       };
@@ -24,22 +28,28 @@
     return comments;
   }
 
-  function getPhotosArray(number) {
+  function generatePhotoObject(number) {
     var photo;
     photo = {
       url: 'photos/' + (number + 1) + '.jpg',
-      likes: window.util.getRandom(15, 200),
-      comments: getCommentsArray(window.util.getRandom(1, 5))
+      likes: window.util.getRandom(MIN_LIKES, MAX_LIKES),
+      comments: getCommentsArray(window.util.getRandom(MIN_COMMENTS, MAX_COMMENTS))
     };
 
     return photo;
   }
 
-  for (var i = 0; i < AMOUNT; i++) {
-    photos[i] = getPhotosArray(i);
+  function get(amount) {
+    var photos = [];
+
+    for (var i = 0; i < amount; i++) {
+      photos[i] = generatePhotoObject(i);
+    }
+
+    return photos;
   }
 
   window.data = {
-    get: photos
+    get: get
   };
 })();
