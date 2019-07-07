@@ -14,6 +14,8 @@
   var bigPictureCancel = document.querySelector('.big-picture__cancel');
 
   function renderCommentElement(comment) {
+    var IMG_WIDTH = 35;
+    var IMG_HEIGHT = 35;
     var li = document.createElement('li');
     var img = document.createElement('img');
     var p = document.createElement('p');
@@ -22,8 +24,8 @@
     img.classList.add('social__picture');
     p.classList.add('social__text');
 
-    img.width = '35';
-    img.height = '35';
+    img.width = '' + IMG_WIDTH;
+    img.height = '' + IMG_HEIGHT;
     img.alt = '' + comment.name;
     img.src = '' + comment.avatar;
 
@@ -36,9 +38,11 @@
   }
 
   function insertCommetsElements(element) {
+    var fragment = document.createDocumentFragment();
     for (var i = 0; i < element.comments.length; i++) {
-      bigPictureSocialCommentsElement.appendChild(renderCommentElement(element.comments[i]));
+      fragment.appendChild(renderCommentElement(element.comments[i]));
     }
+    bigPictureSocialCommentsElement.appendChild(fragment);
   }
 
   function renderInfo(element) {
@@ -64,13 +68,15 @@
 
   function init(photos) {
     function openPopup(evt) {
-      var foundElement = findClickedElementObjectInArray(evt);
-      bigPictureElement.classList.remove('hidden');
-      bigPictureCancel.addEventListener('click', closePopup);
-      document.addEventListener('keydown', onPopupEscKeydown);
-      body.classList.add('modal-open');
-      renderInfo(foundElement);
-      insertCommetsElements(foundElement);
+      if (evt.target.tagName.toLowerCase() === 'img') {
+        var foundElement = findClickedElementObjectInArray(evt);
+        bigPictureElement.classList.remove('hidden');
+        bigPictureCancel.addEventListener('click', closePopup);
+        document.addEventListener('keydown', onPopupEscKeydown);
+        body.classList.add('modal-open');
+        renderInfo(foundElement);
+        insertCommetsElements(foundElement);
+      }
     }
 
     function findClickedElementObjectInArray(evt) {
