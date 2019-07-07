@@ -35,9 +35,11 @@
   }
 
   function insertCommetsElements(element) {
+    var fragment = document.createDocumentFragment();
     for (var i = 0; i < element.comments.length; i++) {
-      bigPictureSocialCommentsElement.appendChild(renderCommentElement(element.comments[i]));
+      fragment.appendChild(renderCommentElement(element.comments[i]));
     }
+    bigPictureSocialCommentsElement.appendChild(fragment);
   }
 
   function renderInfo(element) {
@@ -49,6 +51,7 @@
 
   function init(photos) {
     bigPictureElement.classList.remove('hidden');
+    bigPictureSocialCommentsElement.innerHTML = '';
     renderInfo(photos[0]);
     insertCommetsElements(photos[0]);
   }
