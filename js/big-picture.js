@@ -9,9 +9,10 @@
   var bigPictureSocialCommentsElement = bigPictureElement.querySelector('.social__comments');
   var bigPictureSocialCommentsCountElement = bigPictureElement.querySelector('.social__comment-count');
   var bigPictureCommentsLoaderElement = bigPictureElement.querySelector('.comments-loader');
-  var picturesElement = document.querySelector('.pictures');
 
   function renderCommentElement(comment) {
+    var IMG_WIDTH = 35;
+    var IMG_HEIGHT = 35;
     var li = document.createElement('li');
     var img = document.createElement('img');
     var p = document.createElement('p');
@@ -20,8 +21,8 @@
     img.classList.add('social__picture');
     p.classList.add('social__text');
 
-    img.width = '35';
-    img.height = '35';
+    img.width = '' + IMG_WIDTH;
+    img.height = '' + IMG_HEIGHT;
     img.alt = '' + comment.name;
     img.src = '' + comment.avatar;
 
@@ -47,13 +48,9 @@
   }
 
   function init(photos) {
-    function openPopup() {
-      bigPictureElement.classList.remove('hidden');
-      renderInfo(photos[0]);
-      insertCommetsElements(photos[0]);
-    }
-
-    picturesElement.addEventListener('click', openPopup);
+    bigPictureElement.classList.remove('hidden');
+    renderInfo(photos[0]);
+    insertCommetsElements(photos[0]);
   }
 
   bigPictureSocialCommentsCountElement.classList.add('visually-hidden');
