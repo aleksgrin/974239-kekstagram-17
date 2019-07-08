@@ -53,9 +53,6 @@
   var scaleControlBiggerElement = document.querySelector('.scale__control--bigger');
   var scaleControlValueElement = document.querySelector('.scale__control--value');
 
-  var uploadPhotoCommentElement = document.querySelector('.text__description');
-  var textHashtagsElement = document.querySelector('.text__hashtags');
-
   function onFilterChange(evt) {
     setFilter(evt.target.value, FILTER_VALUE_DEFAULT);
   }
@@ -213,8 +210,6 @@
     var checkedFilterType = effectsList.querySelector('input:checked').value;
     setFilter(checkedFilterType, FILTER_VALUE_DEFAULT);
     setControlElementValue(SCALE_VALUE_DEFAULT);
-    uploadPhotoCommentElement.value = '';
-    textHashtagsElement.value = '';
   }
 
   window.preview = {
