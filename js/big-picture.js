@@ -68,7 +68,7 @@
 
   function init(photos) {
     function openPopup(evt) {
-      if (evt.target.tagName.toLowerCase() === 'img') {
+      if (evt.target.tagName.toLowerCase() === 'img' && evt.target.classList.contains('picture__img')) {
         var foundElement = findClickedElementObjectInArray(evt);
         bigPictureElement.classList.remove('hidden');
         bigPictureCancel.addEventListener('click', closePopup);

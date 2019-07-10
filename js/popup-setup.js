@@ -12,6 +12,7 @@
     }
   }
 
+  // Все что относится к форме - ниже
   function showSuccessMessage() {
     var successTemplateElement = document.querySelector('#success')
     .content
@@ -88,20 +89,24 @@
     document.addEventListener('click', onErrorDocumentClick);
   }
 
-  function successHandler() {
+  function successHandler(action) {
     showSuccessMessage();
-    closePopup();
+    action();
   }
 
-  function errorHandler(message) {
+  function errorHandler(action, message) {
+    console.log(message);
     showErrorMessage(message);
-    closePopup();
+    action();
   }
 
   function onFormSubmit(evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(form), successHandler, errorHandler);
+    window.backend.save(new FormData(form), successHandler(closePopup), errorHandler(closePopup));
   }
+
+  // Все что относится к форме - выше
+  // ////////////////////////////////
 
   function onPhotoCommentFocus() {
     document.removeEventListener('keydown', onPopupEscKeydown);
