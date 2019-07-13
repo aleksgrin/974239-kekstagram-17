@@ -16,10 +16,15 @@
 
   function render(photos) {
     var fragment = document.createDocumentFragment();
+    var picture = null;
 
-    for (var i = 0; i < photos.length; i++) {
-      fragment.appendChild(createPicturesDOM(photos[i]));
-    }
+    photos.forEach(function (item) {
+      picture = createPicturesDOM(item);
+      fragment.appendChild(picture);
+      picture.addEventListener('click', function () {
+        window.bigPicture.show(item);
+      });
+    });
 
     picturesElement.appendChild(fragment);
   }

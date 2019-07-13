@@ -8,7 +8,6 @@
     window.gallery.render(photos);
     window.filter.show();
     window.filter.init(photos);
-    window.bigPicture.init(photos);
   }
 
   uploadInputElement.addEventListener('change', window.popupSetup.open);
