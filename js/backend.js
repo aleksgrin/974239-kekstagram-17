@@ -2,7 +2,7 @@
 
 (function () {
   var Url = {
-    SAVE: 'https://js.dump.academy/kekstagram',
+    SAVE: 'https://js.dump.academy/kekstagram1',
     LOAD: 'https://js.dump.academy/kekstagram/data'
   };
   var TIMEOUT_VALUE = 10000;
@@ -62,7 +62,3 @@
     save: saveFormDataToServer
   };
 })();
-
-// function outer(action) {
-//   action();
-// }
