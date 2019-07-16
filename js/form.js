@@ -101,7 +101,7 @@
 
   function isHashFirst(array) {
     for (var i = 0; i < array.length; i++) {
-      if (array[i].charAt(0) !== '#') {
+      if (array[i][0] !== '#') {
         return false;
       }
     }
@@ -121,7 +121,8 @@
 
   function isOnlyHash(array) {
     for (var i = 0; i < array.length; i++) {
-      if (array[i].charAt(array[i].length - 1) === '#') {
+      // if (array[i].charAt(array[i].length - 1) === '#') {
+      if (array[i][array[i].length - 1] === '#' && array[i][0] === '#') {
         return false;
       }
     }
@@ -130,14 +131,12 @@
   }
 
   function isSameHash(array) {
-    for (var i = 0; i < array.length; i++) {
-      var element = array[i];
-      for (var j = 0; j < array.length; j++) {
-        if (j === i) {
-          continue;
-        } else if (array[j] === element) {
-          return false;
-        }
+    var current;
+    while (array.length > 1) {
+      current = array[0];
+      array.shift();
+      if (array.indexOf(current) !== -1) {
+        return false;
       }
     }
 
@@ -195,7 +194,7 @@
 
   function onFormSubmit(evt) {
     evt.preventDefault();
-    if (formCheck() === true) {
+    if (formCheck()) {
       window.backend.save(new FormData(form), onLoad, onError);
     }
   }
