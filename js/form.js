@@ -99,104 +99,82 @@
     showErrorMessage(message);
   }
 
-  function isHashFirst(array) {
-    for (var i = 0; i < array.length; i++) {
-      if (array[i][0] !== '#') {
-        return false;
-      }
-    }
-
-    return true;
+  function isTagWithoutHash(array) {
+    return array.some(function (tag) {
+      return tag[0] !== '#';
+    });
   }
 
-  function isSpaceBetween(array) {
+  function isNoSpaceBetween(array) {
     for (var i = 0; i < array.length; i++) {
       if (array[i].indexOf('#', 1) !== -1) {
-        return false;
+        return true;
       }
     }
 
-    return true;
+    return false;
   }
 
   function isOnlyHash(array) {
-    for (var i = 0; i < array.length; i++) {
-      // if (array[i].charAt(array[i].length - 1) === '#') {
-      if (array[i][array[i].length - 1] === '#' && array[i][0] === '#') {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function isSameHash(array) {
-    var current;
-    while (array.length > 1) {
-      current = array[0];
-      array.shift();
-      if (array.indexOf(current) !== -1) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function isMoreElementsThan(array, max) {
-    return array.length <= max;
+    return array.some(function (tag) {
+      return tag[0] === '#' && tag.length === 1;
+    });
   }
 
   function isLongerThan(array, max) {
-    for (var i = 0; i < array.length; i++) {
-      if (array[i].length > max) {
-        return false;
+    return array.some(function (tag) {
+      return tag.length > max;
+    });
+  }
+
+  function isSameHash(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var lastElement = array[i];
+      if (array.indexOf(lastElement) !== i) {
+        return true;
       }
     }
 
-    return true;
+    return false;
   }
 
   function formCheck() {
     var tagsArray = textHashtagsElement.value.toLowerCase().split(' ');
+    textHashtagsElement.setCustomValidity('');
 
-    if (isHashFirst(tagsArray) === false) {
-      textHashtagsElement.setCustomValidity('Каждый хештег должен начинаться с решетки');
-      return false;
+    if (textHashtagsElement.value.trim() === '') {
+      textHashtagsElement.setCustomValidity('');
     }
 
-    if (isOnlyHash(tagsArray) === false) {
-      textHashtagsElement.setCustomValidity('Хештег не может состоять только из одной решетки');
-      return false;
-    }
-
-    if (isSpaceBetween(tagsArray) === false) {
-      textHashtagsElement.setCustomValidity('Каждый хештег должен разделяться пробелом');
-      return false;
-    }
-
-    if (isSameHash(tagsArray) === false) {
-      textHashtagsElement.setCustomValidity('Нельзя использовать несколько одинаковых хештегов');
-      return false;
-    }
-
-    if (isMoreElementsThan(tagsArray, MAX_TAGS_AMOUNT) === false) {
+    if (tagsArray.length > 5) {
       textHashtagsElement.setCustomValidity('Количество комментариев не должно быть больше ' + MAX_TAGS_AMOUNT);
-      return false;
     }
 
-    if (isLongerThan(tagsArray, MAX_TAG_LENGTH) === false) {
-      textHashtagsElement.setCustomValidity('Длина тега не может быть больше ' + MAX_TAG_LENGTH + ' символов, включая решетку');
-      return false;
+    if (isTagWithoutHash(tagsArray)) {
+      textHashtagsElement.setCustomValidity('Каждый хештег должен начинаться с решетки');
     }
-    return true;
+
+    if (isOnlyHash(tagsArray)) {
+      textHashtagsElement.setCustomValidity('Хештег не может состоять только из одной решетки');
+    }
+
+    if (isNoSpaceBetween(tagsArray)) {
+      textHashtagsElement.setCustomValidity('Каждый хештег должен разделяться пробелом');
+    }
+
+    if (isLongerThan(tagsArray, MAX_TAG_LENGTH)) {
+      textHashtagsElement.setCustomValidity('Длина тега не может быть больше ' + MAX_TAG_LENGTH + ' символов, включая решетку');
+    }
+
+    if (isSameHash(tagsArray)) {
+      textHashtagsElement.setCustomValidity('Нельзя использовать несколько одинаковых хештегов');
+    }
+
   }
 
   function onFormSubmit(evt) {
     evt.preventDefault();
-    if (formCheck()) {
-      window.backend.save(new FormData(form), onLoad, onError);
-    }
+    window.backend.save(new FormData(form), onLoad, onError);
   }
 
   function init() {
@@ -206,6 +184,9 @@
   function destroy() {
     form.removeEventListener('submit', onFormSubmit);
   }
+
+  textHashtagsElement.addEventListener('change', formCheck);
+
 
   window.form = {
     default: setFormDefault,
