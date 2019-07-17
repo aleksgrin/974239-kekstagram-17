@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var BASE_COMMETS_AMOUNT = 5;
   var bigPictureElement = document.querySelector('.big-picture');
   var bigPictureImgElement = bigPictureElement.querySelector('.big-picture__img img');
   var bigPictureLikesCountElement = bigPictureElement.querySelector('.likes-count');
@@ -38,7 +39,7 @@
 
   function insertCommetsElements(element) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < element.comments.length; i++) {
+    for (var i = 0; i < BASE_COMMETS_AMOUNT; i++) {
       fragment.appendChild(renderCommentElement(element.comments[i]));
     }
     bigPictureSocialCommentsElement.appendChild(fragment);
@@ -72,10 +73,11 @@
     body.classList.add('modal-open');
     renderInfo(photo);
     insertCommetsElements(photo);
+    bigPictureCommentsLoaderElement.addEventListener('click');
   }
 
   bigPictureSocialCommentsCountElement.classList.add('visually-hidden');
-  bigPictureCommentsLoaderElement.classList.add('visually-hidden');
+  // bigPictureCommentsLoaderElement.classList.add('visually-hidden');
 
   window.bigPicture = {
     show: show
