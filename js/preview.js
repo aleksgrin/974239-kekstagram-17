@@ -155,6 +155,7 @@
   }
 
   function onScaleBiggerClick() {
+    debugger;
     setScaleValue(ZOOM_IN);
   }
 
