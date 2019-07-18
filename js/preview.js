@@ -46,7 +46,7 @@
   var imgUploadSliderElement = document.querySelector('.img-upload__effect-level');
   var effectLevelLineElement = document.querySelector('.effect-level__line');
   var imgPreviewElement = document.querySelector('.img-upload__preview img');
-  var PreviewElement = document.querySelector('.img-upload__preview');
+  var previewElement = document.querySelector('.img-upload__preview');
   var effectLevelInputElement = document.querySelector('.effect-level__value');
   var effectLevelLineDepthElement = document.querySelector('.effect-level__depth');
   var effectLevelElement = document.querySelector('.effect-level__pin');
@@ -135,22 +135,22 @@
 
     switch (filterType) {
       case 'chrome':
-        PreviewElement.style = 'filter: grayscale(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.chrome + ')';
+        previewElement.style = 'filter: grayscale(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.chrome + ')';
         break;
       case 'sepia':
-        PreviewElement.style = 'filter: sepia(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.sepia + ')';
+        previewElement.style = 'filter: sepia(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.sepia + ')';
         break;
       case 'marvin':
-        PreviewElement.style = 'filter: invert(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.marvin + '%)';
+        previewElement.style = 'filter: invert(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.marvin + '%)';
         break;
       case 'phobos':
-        PreviewElement.style = 'filter: blur(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.phobos + 'px)';
+        previewElement.style = 'filter: blur(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.phobos + 'px)';
         break;
       case 'heat':
-        PreviewElement.style = 'filter: brightness(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.heat + ')';
+        previewElement.style = 'filter: brightness(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.heat + ')';
         break;
       default:
-        PreviewElement.style = '';
+        previewElement.style = '';
         break;
     }
   }
