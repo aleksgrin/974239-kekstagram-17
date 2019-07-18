@@ -30,6 +30,7 @@
   var SCALE_VALUE_DEFAULT = 100;
   var ZOOM_IN = 'zoomIn';
   var ZOOM_OUT = 'zoomOut';
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var EffectsInterval = {
     chrome: ChromeEffect.MAX - ChromeEffect.MIN,
@@ -41,6 +42,7 @@
 
   var FILTER_VALUE_DEFAULT = 100;
 
+  var uploadInputElement = document.querySelector('#upload-file');
   var imgUploadSliderElement = document.querySelector('.img-upload__effect-level');
   var effectLevelLineElement = document.querySelector('.effect-level__line');
   var imgPreviewElement = document.querySelector('.img-upload__preview img');
@@ -197,6 +199,22 @@
     effectLevelElement.addEventListener('mousedown', onPinMouseDown);
     scaleControlBiggerElement.addEventListener('click', onScaleBiggerClick);
     scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
+
+    var file = uploadInputElement.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        imgPreviewElement.src = reader.result;
+      });
+      reader.readAsDataURL(file);
+    }
   }
 
   function resetPreviewEvents() {
