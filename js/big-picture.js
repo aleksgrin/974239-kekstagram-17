@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var BASE_COMMETS_AMOUNT = 5;
+  var BASE_COMMENTS_AMOUNT = 5;
   var bigPictureElement = document.querySelector('.big-picture');
   var bigPictureImgElement = bigPictureElement.querySelector('.big-picture__img img');
   var bigPictureLikesCountElement = bigPictureElement.querySelector('.likes-count');
@@ -50,10 +50,9 @@
     }
   }
 
-  function insertCommetsElements(comments) {
-    var length = (comments.length > BASE_COMMETS_AMOUNT) ? BASE_COMMETS_AMOUNT : comments.length;
+  function insertCommentsElements(comments) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < length; i++) {
+    for (var i = 0; i < comments.length; i++) {
       fragment.appendChild(renderCommentElement(comments[i]));
     }
     bigPictureSocialCommentsElement.appendChild(fragment);
@@ -67,22 +66,24 @@
   }
 
   function show(photo) {
-    var commentsCopy = photo.comments.slice();
+    var comments = photo.comments.slice();
+    var commentsToPublish = comments.slice(0, BASE_COMMENTS_AMOUNT);
     bigPictureSocialCommentsElement.innerHTML = '';
     bigPictureElement.classList.remove('hidden');
-    bigPictureCommentsLoaderElement.classList.remove('visually-hidden');
+    bigPictureCommentsLoaderElement.classList.remove('hidden');
     bigPictureCancel.addEventListener('click', closePopup);
     document.addEventListener('keydown', onPopupEscKeydown);
     body.classList.add('modal-open');
     renderInfo(photo);
-    insertCommetsElements(commentsCopy);
+    insertCommentsElements(commentsToPublish);
     bigPictureCommentsLoaderElement.addEventListener('click', onCommentsLoaderClick);
 
     function onCommentsLoaderClick() {
-      commentsCopy.splice(0, BASE_COMMETS_AMOUNT);
-      insertCommetsElements(commentsCopy);
-      if (commentsCopy.length <= BASE_COMMETS_AMOUNT) {
-        bigPictureCommentsLoaderElement.classList.add('visually-hidden');
+      comments = comments.slice(BASE_COMMENTS_AMOUNT);
+      commentsToPublish = comments.slice(0, BASE_COMMENTS_AMOUNT);
+      insertCommentsElements(commentsToPublish);
+      if (commentsToPublish.length < BASE_COMMENTS_AMOUNT) {
+        bigPictureCommentsLoaderElement.classList.add('hidden');
         bigPictureCommentsLoaderElement.removeEventListener('click', onCommentsLoaderClick);
       }
     }
