@@ -27,6 +27,7 @@
     uploadPhotoCommentElement.addEventListener('blur', onPhotoCommentBlur);
     window.preview.destroy();
     window.form.destroy();
+    window.form.default();
   }
 
   function setFormInputResetState() {
