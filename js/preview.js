@@ -46,6 +46,7 @@
   var imgUploadSliderElement = document.querySelector('.img-upload__effect-level');
   var effectLevelLineElement = document.querySelector('.effect-level__line');
   var imgPreviewElement = document.querySelector('.img-upload__preview img');
+  var PreviewElement = document.querySelector('.img-upload__preview');
   var effectLevelInputElement = document.querySelector('.effect-level__value');
   var effectLevelLineDepthElement = document.querySelector('.effect-level__depth');
   var effectLevelElement = document.querySelector('.effect-level__pin');
@@ -134,28 +135,27 @@
 
     switch (filterType) {
       case 'chrome':
-        imgPreviewElement.style = 'filter: grayscale(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.chrome + ')';
+        PreviewElement.style = 'filter: grayscale(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.chrome + ')';
         break;
       case 'sepia':
-        imgPreviewElement.style = 'filter: sepia(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.sepia + ')';
+        PreviewElement.style = 'filter: sepia(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.sepia + ')';
         break;
       case 'marvin':
-        imgPreviewElement.style = 'filter: invert(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.marvin + '%)';
+        PreviewElement.style = 'filter: invert(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.marvin + '%)';
         break;
       case 'phobos':
-        imgPreviewElement.style = 'filter: blur(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.phobos + 'px)';
+        PreviewElement.style = 'filter: blur(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.phobos + 'px)';
         break;
       case 'heat':
-        imgPreviewElement.style = 'filter: brightness(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.heat + ')';
+        PreviewElement.style = 'filter: brightness(' + pinValue / FILTER_VALUE_DEFAULT * EffectsInterval.heat + ')';
         break;
       default:
-        imgPreviewElement.style = '';
+        PreviewElement.style = '';
         break;
     }
   }
 
   function onScaleBiggerClick() {
-    debugger;
     setScaleValue(ZOOM_IN);
   }
 
