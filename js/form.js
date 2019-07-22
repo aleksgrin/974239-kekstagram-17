@@ -177,12 +177,28 @@
     window.backend.save(new FormData(form), onLoad, onError);
   }
 
+  function onInputFocus() {
+    window.escKeydown.destroy();
+  }
+
+  function onInputBlur() {
+    window.escKeydown.init();
+  }
+
   function init() {
     form.addEventListener('submit', onFormSubmit);
+    uploadPhotoCommentElement.addEventListener('focus', onInputFocus);
+    uploadPhotoCommentElement.addEventListener('blur', onInputBlur);
+    textHashtagsElement.addEventListener('focus', onInputFocus);
+    textHashtagsElement.addEventListener('blur', onInputBlur);
   }
 
   function destroy() {
     form.removeEventListener('submit', onFormSubmit);
+    uploadPhotoCommentElement.removeEventListener('focus', onInputFocus);
+    uploadPhotoCommentElement.removeEventListener('blur', onInputBlur);
+    textHashtagsElement.removeEventListener('focus', onInputFocus);
+    textHashtagsElement.removeEventListener('blur', onInputBlur);
   }
 
   textHashtagsElement.addEventListener('change', formCheck);
