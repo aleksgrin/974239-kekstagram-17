@@ -141,33 +141,41 @@
   function formCheck() {
     var tagsArray = textHashtagsElement.value.toLowerCase().split(' ');
     textHashtagsElement.setCustomValidity('');
+    textHashtagsElement.style = '';
 
     if (textHashtagsElement.value.trim() === '') {
       textHashtagsElement.setCustomValidity('');
+      textHashtagsElement.style = '';
     }
 
     if (tagsArray.length > 5) {
       textHashtagsElement.setCustomValidity('Количество комментариев не должно быть больше ' + MAX_TAGS_AMOUNT);
+      textHashtagsElement.style = 'outline: 3px solid #D30000';
     }
 
     if (isTagWithoutHash(tagsArray)) {
       textHashtagsElement.setCustomValidity('Каждый хештег должен начинаться с решетки');
+      textHashtagsElement.style = 'outline: 3px solid #D30000';
     }
 
     if (isOnlyHash(tagsArray)) {
       textHashtagsElement.setCustomValidity('Хештег не может состоять только из одной решетки');
+      textHashtagsElement.style = 'outline: 3px solid #D30000';
     }
 
     if (isNoSpaceBetween(tagsArray)) {
       textHashtagsElement.setCustomValidity('Каждый хештег должен разделяться пробелом');
+      textHashtagsElement.style = 'outline: 3px solid #D30000';
     }
 
     if (isLongerThan(tagsArray, MAX_TAG_LENGTH)) {
       textHashtagsElement.setCustomValidity('Длина тега не может быть больше ' + MAX_TAG_LENGTH + ' символов, включая решетку');
+      textHashtagsElement.style = 'outline: 3px solid #D30000';
     }
 
     if (isSameHash(tagsArray)) {
       textHashtagsElement.setCustomValidity('Нельзя использовать несколько одинаковых хештегов');
+      textHashtagsElement.style = 'outline: 3px solid #D30000';
     }
 
   }
