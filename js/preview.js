@@ -50,7 +50,7 @@
   var effectLevelInputElement = document.querySelector('.effect-level__value');
   var effectLevelLineDepthElement = document.querySelector('.effect-level__depth');
   var effectLevelElement = document.querySelector('.effect-level__pin');
-  var effectsList = document.querySelector('.effects__list');
+  var effectsListElement = document.querySelector('.effects__list');
 
   var scaleControlSmallerElement = document.querySelector('.scale__control--smaller');
   var scaleControlBiggerElement = document.querySelector('.scale__control--bigger');
@@ -63,7 +63,7 @@
   function onPinMouseDown(downEvt) {
     var startCoordsX = downEvt.clientX;
     var pinOffset = effectLevelElement.offsetLeft;
-    var checkedFilterType = effectsList.querySelector('input:checked').value;
+    var checkedFilterType = effectsListElement.querySelector('input:checked').value;
 
     function onPinMouseMove(moveEvt) {
       var shiftX = startCoordsX - moveEvt.clientX;
@@ -196,7 +196,7 @@
   }
 
   function addPreviewEvents() {
-    effectsList.addEventListener('change', onFilterChange);
+    effectsListElement.addEventListener('change', onFilterChange);
     effectLevelElement.addEventListener('mousedown', onPinMouseDown);
     scaleControlBiggerElement.addEventListener('click', onScaleBiggerClick);
     scaleControlSmallerElement.addEventListener('click', onScaleSmallerClick);
@@ -219,14 +219,14 @@
   }
 
   function resetPreviewEvents() {
-    effectsList.removeEventListener('change', onFilterChange);
+    effectsListElement.removeEventListener('change', onFilterChange);
     effectLevelElement.removeEventListener('mousedown', onPinMouseDown);
     scaleControlBiggerElement.removeEventListener('click', onScaleBiggerClick);
     scaleControlSmallerElement.removeEventListener('click', onScaleSmallerClick);
   }
 
   function setPreviewDefault() {
-    var checkedFilterType = effectsList.querySelector('input:checked').value;
+    var checkedFilterType = effectsListElement.querySelector('input:checked').value;
     setFilter(checkedFilterType, FILTER_VALUE_DEFAULT);
     setControlElementValue(SCALE_VALUE_DEFAULT);
   }

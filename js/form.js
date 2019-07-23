@@ -6,7 +6,7 @@
 
   var uploadPhotoCommentElement = document.querySelector('.text__description');
   var textHashtagsElement = document.querySelector('.text__hashtags');
-  var form = document.querySelector('.img-upload__form');
+  var formElement = document.querySelector('.img-upload__form');
 
   function showSuccessMessage() {
     var successTemplateElement = document.querySelector('#success')
@@ -174,7 +174,7 @@
 
   function onFormSubmit(evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(form), onLoad, onError);
+    window.backend.save(new FormData(formElement), onLoad, onError);
   }
 
   function onInputFocus() {
@@ -186,7 +186,7 @@
   }
 
   function init() {
-    form.addEventListener('submit', onFormSubmit);
+    formElement.addEventListener('submit', onFormSubmit);
     uploadPhotoCommentElement.addEventListener('focus', onInputFocus);
     uploadPhotoCommentElement.addEventListener('blur', onInputBlur);
     textHashtagsElement.addEventListener('focus', onInputFocus);
@@ -194,7 +194,7 @@
   }
 
   function destroy() {
-    form.removeEventListener('submit', onFormSubmit);
+    formElement.removeEventListener('submit', onFormSubmit);
     uploadPhotoCommentElement.removeEventListener('focus', onInputFocus);
     uploadPhotoCommentElement.removeEventListener('blur', onInputBlur);
     textHashtagsElement.removeEventListener('focus', onInputFocus);
