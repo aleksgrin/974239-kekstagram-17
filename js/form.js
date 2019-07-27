@@ -3,6 +3,7 @@
 (function () {
   var MAX_TAGS_AMOUNT = 5;
   var MAX_TAG_LENGTH = 20;
+  var OUTLINE = 'outline: 3px solid #D30000';
 
   var uploadPhotoCommentElement = document.querySelector('.text__description');
   var textHashtagsElement = document.querySelector('.text__hashtags');
@@ -150,32 +151,32 @@
 
     if (tagsArray.length > 5) {
       textHashtagsElement.setCustomValidity('Количество комментариев не должно быть больше ' + MAX_TAGS_AMOUNT);
-      textHashtagsElement.style = 'outline: 3px solid #D30000';
+      textHashtagsElement.style = OUTLINE;
     }
 
     if (isTagWithoutHash(tagsArray)) {
       textHashtagsElement.setCustomValidity('Каждый хештег должен начинаться с решетки');
-      textHashtagsElement.style = 'outline: 3px solid #D30000';
+      textHashtagsElement.style = OUTLINE;
     }
 
     if (isOnlyHash(tagsArray)) {
       textHashtagsElement.setCustomValidity('Хештег не может состоять только из одной решетки');
-      textHashtagsElement.style = 'outline: 3px solid #D30000';
+      textHashtagsElement.style = OUTLINE;
     }
 
     if (isNoSpaceBetween(tagsArray)) {
       textHashtagsElement.setCustomValidity('Каждый хештег должен разделяться пробелом');
-      textHashtagsElement.style = 'outline: 3px solid #D30000';
+      textHashtagsElement.style = OUTLINE;
     }
 
     if (isLongerThan(tagsArray, MAX_TAG_LENGTH)) {
       textHashtagsElement.setCustomValidity('Длина тега не может быть больше ' + MAX_TAG_LENGTH + ' символов, включая решетку');
-      textHashtagsElement.style = 'outline: 3px solid #D30000';
+      textHashtagsElement.style = OUTLINE;
     }
 
     if (isSameHash(tagsArray)) {
       textHashtagsElement.setCustomValidity('Нельзя использовать несколько одинаковых хештегов');
-      textHashtagsElement.style = 'outline: 3px solid #D30000';
+      textHashtagsElement.style = OUTLINE;
     }
 
   }
@@ -186,11 +187,11 @@
   }
 
   function onInputFocus() {
-    window.escKeydown.destroy();
+    window.util.destroyEsc();
   }
 
   function onInputBlur() {
-    window.escKeydown.init();
+    window.util.initEsc();
   }
 
   function init() {

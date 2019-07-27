@@ -5,6 +5,20 @@
     ENTER: 13
   };
 
+  function onPopupEscKeydown(evt) {
+    if (window.util.isEsc(evt)) {
+      window.popupSetup.close();
+    }
+  }
+
+  function init() {
+    document.addEventListener('keydown', onPopupEscKeydown);
+  }
+
+  function destroy() {
+    document.removeEventListener('keydown', onPopupEscKeydown);
+  }
+
   function isEscEvent(evt) {
     return evt.keyCode === KeyCode.ESC;
   }
@@ -18,6 +32,8 @@
   }
 
   window.util = {
+    initEsc: init,
+    destroyEsc: destroy,
     isEsc: isEscEvent,
     isEnter: isEnterEvent,
     getRandom: getRandomIntegerFromInterval

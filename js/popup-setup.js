@@ -7,7 +7,7 @@
   function closePopup() {
     setFormInputResetState();
     uploadFormELement.classList.add('hidden');
-    window.escKeydown.destroy();
+    window.util.destroyEsc();
     window.preview.destroy();
     window.form.destroy();
     window.form.default();
@@ -19,7 +19,7 @@
 
   function open() {
     uploadFormELement.classList.remove('hidden');
-    window.escKeydown.init();
+    window.util.initEsc();
     window.preview.init();
     window.preview.default();
     window.form.init();
