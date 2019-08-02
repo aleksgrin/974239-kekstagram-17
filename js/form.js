@@ -149,7 +149,7 @@
       textHashtagsElement.style = '';
     }
 
-    if (tagsArray.length > 5) {
+    if (tagsArray.length > MAX_TAGS_AMOUNT) {
       textHashtagsElement.setCustomValidity('Количество комментариев не должно быть больше ' + MAX_TAGS_AMOUNT);
       textHashtagsElement.style = OUTLINE;
     }
